@@ -59,8 +59,7 @@ defmodule FlockHero.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:req, "~> 0.4"},
-      {:joken, "~> 2.6"},
-      {:mox, "~> 1.1", only: :test}
+      {:joken, "~> 2.6"}
     ]
   end
 

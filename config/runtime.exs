@@ -66,15 +66,14 @@ if config_env() == :prod do
     secret_key_base: secret_key_base
 
   config :flock_hero, :firebase,
-    project_id: System.get_env("FIREBASE_PROJECT_ID") || raise "Missing FIREBASE_PROJECT_ID"
+    project_id: System.get_env("FIREBASE_PROJECT_ID") || raise("Missing FIREBASE_PROJECT_ID")
   
   config :flock_hero, :sendgrid,
-    api_key: System.get_env("SENDGRID_API_KEY") || raise "Missing SENDGRID_API_KEY" # For dev, can use a dummy
+    api_key: System.get_env("SENDGRID_API_KEY") || raise("Missing SENDGRID_API_KEY") # For dev, can use a dummy
   
   config :flock_hero, :twilio,
-    account_sid: System.get_env("TWILIO_ACCOUNT_SID") || raise "Missing TWILIO_ACCOUNT_SID",
-    auth_token: System.get_env("TWILIO_AUTH_TOKEN") || raise "Missing TWILIO_AUTH_TOKEN"
-
+    account_sid: System.get_env("TWILIO_ACCOUNT_SID") || raise("Missing TWILIO_ACCOUNT_SID"),
+    auth_token: System.get_env("TWILIO_AUTH_TOKEN") || raise("Missing TWILIO_AUTH_TOKEN")
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
