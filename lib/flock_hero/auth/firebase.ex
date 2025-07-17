@@ -7,11 +7,12 @@ defmodule FlockHero.Auth.Firebase do
   @cache_table :firebase_public_keys_cache
   @cache_ttl_ms 3_600_000  # 1 hour
 
-  def fetch_public_keys(req_module \\ Req) do
+  def fetch_public_keys(_req_module \\ nil) do  # Drop unused arg for simplicity
     case get_cached_keys() do
       {:ok, keys} -> keys
       :error ->
-        response = req_module.get!(@public_keys_url)
+        req_options = Application.fetch_env!(:flock_hero, :req_options)
+        response = Req.get!(@public_keys_url, req_options)
         if response.status == 200 do
           keys = response.body
                  |> Enum.map(fn {kid, cert} -> {kid, parse_cert(cert)} end)
