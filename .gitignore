@@ -35,4 +35,8 @@ flock_hero-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore swap files (open and edited)
+*.swp
+
+# Ignore environment variables
 .env
