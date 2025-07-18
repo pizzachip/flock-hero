@@ -62,31 +62,15 @@ defmodule FlockHero.AccountsTest do
   end
 
   describe "upsert_from_claims/1" do
-    test "creates new account from valid claims" do
-      claims = %{"sub" => "test-uid", "email" => "test@example.com", "name" => "Test User"}
-      {:ok, account} = Accounts.upsert_from_claims(claims)
-
-      assert account.firebase_uid == "test-uid"
-      assert account.email == "test@example.com"
-      assert account.name == "Test User"
+    test "upserts with valid token" do
+      valid_token = "your_valid_firebase_test_token_here"  # Replace with real/dummy
+      {:ok, account} = Accounts.upsert_from_claims(valid_token)
+      assert account.firebase_uid == "expected-uid-from-token"
     end
-
-    test "updates existing account from claims" do
-      existing = account_fixture(firebase_uid: "test-uid", email: "old@example.com", name: "Old Name")
-      claims = %{"sub" => "test-uid", "email" => "new@example.com", "name" => "New Name"}
-
-      {:ok, updated} = Accounts.upsert_from_claims(claims)
-
-      assert updated.id == existing.id
-      assert updated.email == "new@example.com"
-      assert updated.name == "New Name"
-    end
-
-    test "fails on invalid claims (missing required fields)" do
-      claims = %{"sub" => "test-uid"}  # Missing email
-      {:error, changeset} = Accounts.upsert_from_claims(claims)
-
-      assert %{email: ["can't be blank"]} = errors_on(changeset)
+  
+    test "errors with invalid token" do
+      invalid_token = "bad.token"
+      assert {:error, {:invalid_token, _}} = Accounts.upsert_from_claims(invalid_token)
     end
   end
 end

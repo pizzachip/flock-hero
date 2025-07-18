@@ -107,12 +107,13 @@ defmodule FlockHero.Accounts do
   Upserts an account based on verified Firebase claims.
   Assumes claims have already been verified via Firebase.verify_token/1.
   """
-  def upsert_from_claims(claims) do
-    attrs = %{
-      firebase_uid: claims["sub"],
-      email: claims["email"],
-      name: claims["name"]  # If present in claims; Firebase may not always have it
-    }
+  def upsert_from_claims(token) do
+    with {:ok, claims} <- FlockHero.Auth.Firebase.verify_token(token) do
+      attrs = %{
+        firebase_uid: claims["sub"],
+        email: claims["email"],
+        name: claims["name"]  # If present in claims; Firebase may not always have it
+      }
  
     case get_by_firebase_uid(attrs.firebase_uid) do
       nil ->
@@ -124,6 +125,10 @@ defmodule FlockHero.Accounts do
         existing
         |> Account.changeset(attrs)
         |> Repo.update()
+    end
+
+    else
+      {:error, reason} -> {:error, {:invalid_token, reason}}
     end
   end
  
