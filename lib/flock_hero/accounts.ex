@@ -108,7 +108,7 @@ defmodule FlockHero.Accounts do
   Assumes claims have already been verified via Firebase.verify_token/1.
   """
   def upsert_from_claims(token) do
-    with {:ok, claims} <- FlockHero.Auth.Firebase.verify_token(token) do
+    with {:ok, claims} <- Firebase.verify_token(token) do
       attrs = %{
         firebase_uid: claims["sub"],
         email: claims["email"],

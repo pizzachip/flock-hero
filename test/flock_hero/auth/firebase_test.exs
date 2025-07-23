@@ -1,5 +1,7 @@
 defmodule FlockHero.Auth.FirebaseTest do
   use ExUnit.Case, async: true
+  import Req.Test, only: [stub: 2]
+  import Mox
 
   alias FlockHero.Auth.Firebase
 

@@ -26,19 +26,25 @@ defmodule FlockHero.Auth.Firebase do
   end
 
   defp get_cached_keys do
-    case :ets.lookup(@cache_table, :keys) do
-      [{_, keys, timestamp}] ->
-        if System.monotonic_time(:millisecond) - timestamp < @cache_ttl_ms do
-          {:ok, keys}
-        else
-          :error
-        end
-      _ -> :error
+    if :ets.whereis(@cache_table) != :undefined do  # Check if table exists first
+      case :ets.lookup(@cache_table, :keys) do 
+        [{_, keys, timestamp}] ->
+          if System.monotonic_time(:millisecond) - timestamp < @cache_ttl_ms do
+            {:ok, keys}
+          else
+            :error
+          end
+        _ -> :error
+      end
+    else
+      :error  # Table doesn't exist yet -> cache miss
     end
   end
 
   defp cache_keys(keys) do
-    :ets.new(@cache_table, [:named_table, :public])  # Create if not exists
+    unless :ets.whereis(@cache_table) != :undefined do
+      :ets.new(@cache_table, [:named_table, :public])
+    end
     :ets.insert(@cache_table, {:keys, keys, System.monotonic_time(:millisecond)})
   end
 

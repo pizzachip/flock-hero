@@ -39,3 +39,7 @@ config :phoenix_live_view,
 config :flock_hero, req_options: [plug: {Req.Test, :firebase_keys}]
 
 config :joken, current_time_adapter: Joken.CurrentTime.Mock
+
+# In config/test.exs (append)
+config :flock_hero, :firebase,
+  project_id: "test-project-id"  # Dummy value for tests
